@@ -43,3 +43,47 @@ explained later.
 nf-core modules are written to a standard that makes it easy to include them
 across nf-core DSL2 workflows. However this makes it slightly more difficult to
 include in a generic Nextflow DSL2 workflow.
+
+## How to use an nf-core module
+
+Let's assume you've started a DSL2 workflow like so, called `my_dsl2_workflow.nf`:
+
+```nextflow
+#! /usr/bin/env nextflow
+
+// Enable DSL2 syntax
+nextflow.enable.dsl = 2
+
+// A workflow parameter called `reads`, which provides the path to a pair of Illumina sequence files.
+params.reads = ''
+
+workflow {
+
+    main:
+    Channel.fromFilePairs(params.reads)
+        .set { input_ch }
+}
+```
+
+You've discovered using `nf-core modules list` that software you want, FastQC, is available as an
+nf-core module. So let's install it in the same directory as your DSL2 workflow.
+
+```bash
+nf-core modules install --tool fastqc .
+```
+
+Using this the first time around will likely produce an error, along the lines of
+`CRITICAL Could not find a 'main.nf' or 'nextflow.config' file in '.'`. To remedy
+this, create a `nextflow.config` file (`touch nextflow.config`), and then try to
+install the module again.
+
+Your working directory will now look something like this:
+```
+| - modules/nf-core/software/fastqc
+|    | - functions.nf
+|    | - main.nf
+|    \ - meta.yml
+| 
+| - my_dsl2_workflow.nf
+\ - nextflow.config
+```
