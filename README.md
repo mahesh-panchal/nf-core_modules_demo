@@ -62,6 +62,7 @@ workflow {
     main:
     Channel.fromFilePairs(params.reads)
         .set { input_ch }
+
 }
 ```
 
@@ -83,7 +84,46 @@ Your working directory will now look something like this:
 |    | - functions.nf
 |    | - main.nf
 |    \ - meta.yml
-| 
+|
 | - my_dsl2_workflow.nf
 \ - nextflow.config
 ```
+
+Let's now include the `FASTQC` process from the fastqc module to our DSL2 workflow.
+
+```nextflow
+#! /usr/bin/env nextflow
+
+// Enable DSL2 syntax
+nextflow.enable.dsl = 2
+
+// A workflow parameter called `reads`, which provides the path to a pair of Illumina sequence files.
+params.reads = ''
+
+// Include the FASTQC process definition from the module file.
+include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:[:])
+
+workflow {
+
+    main:
+    Channel.fromFilePairs(params.reads)
+        .set { input_ch }
+
+}
+```
+
+Let's unpack the line we just included.
+
+```nextflow
+include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:[:])
+```
+
+An nf-core module convention is to name processes in uppercase using `<SOFTWARE>_<TOOL>`.
+This means our FastQC process will be named `FASTQC`, which we can see in the
+`./modules/nf-core/software/fastqc/main.nf` file. The path following the `from` keyword
+tells Nextflow to look for the process definition in the path `./modules/nf-core/software/fastqc`.
+Nextflow checks the path to see if it's a directory, or if a file called `fastqc.nf` exists. If
+it's a directory, Nextflow looks for the file `main.nf`. The last part is the `addParams`
+declaration, which passes parameters to the workflow (`main.nf`) that contains the process
+definition. In this case, `addParams(options:[:])` initialises the `main.nf` workflow parameter
+`params.options` to an empty Map `[:]`. 
