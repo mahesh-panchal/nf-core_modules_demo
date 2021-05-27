@@ -200,11 +200,13 @@ The nf-core DSL2 template includes an extra line to help accessing these paramet
 def modules = params.modules.clone()
 ```
 
-By adding the line above to your DSL2 workflow, you can then pass the `fastqc` module options to the `FASTQC` module, like so:
+By adding the line above to your DSL2 workflow, you can then pass the `fastqc` module options to the FastQC module, like so:
 ```
 include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:modules['fastqc'])
 ```
 This passes the Map `modules['fastqc']` as the `params.options` of the FastQC `main.nf` script.
+You can see where the parameters are used in the
+`main.nf` scripts by looking for the `$options.args` for example.
 
 Amend your workflow to include these changes:
 ```nextflow
@@ -213,4 +215,96 @@ def modules = params.modules.clone()
 
 // Include the FASTQC process definition from the module file.
 include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:modules['fastqc'])
+```
+
+### Providing metadata.
+
+If you looked at the `main.nf` script of the FastQC module, you
+may have noticed that the input declaration looks like:
+```
+    input:
+    tuple val(meta), path(reads)
+```
+This means the `FASTQC` process is looking for input in the form
+`[meta, reads]` where `meta` is sample metadata, and `reads` are
+the read files to be processed. `meta` is a Map which provides
+sample specific information, such as `id`, `single_end`, and `read_group`.
+Each module needs to be individually checked for which sample metadata fields
+need to be provided. Not all nf-core modules require sample metadata, for example
+[BWA INDEX](https://github.com/nf-core/modules/blob/master/software/bwa/index/main.nf).
+
+In the nf-core DSL2 template, the sample metadata is expected to be set by
+the workflow `INPUT_CHECK`, which calls the process `SAMPLESHEET_CHECK`,
+which runs the python script `check_samplesheet.py` from the workflow `bin` folder.
+The nf-core DSL2 template `check_samplesheet.py` modifies the input sample sheet
+to contain the columns `sample`,`single_end`,`fastq_1`,`fastq_2`, after being
+provided `sample`,`fastq_1`, and `fastq_2` in the samplesheet. The `INPUT_CHECK`
+workflow then uses the `splitCsv` and `map` channel operators to construct the sample metadata
+using the `get_sample_info` function, which returns the complex data structure
+`[{id: <string>, single_end: <boolean>}, [fastq_1, fastq_2]]`. This complex data
+structure is an Array with two elements. The first element is a Map with the keys
+`id`, and `single_end`. The second element is an Array containing the paths
+to the sample input files.
+
+If you're not using the nf-core DSL2 template, you can use a similar method in your workflow to
+provide sample metadata. Provide a samplesheet with the sample metadata as extra
+columns, and then using the `splitCsv`, and `map` channel operators to convert the
+input to the correct format.
+
+For example, if the samplesheet contains the columns `sample`,`single_end`,`fastq_1`,
+and `fastq_2`, you could define your own function based on the `get_sample_info`
+function from `INPUT_CHECK` to provide channel data in the expected format.
+If you're comfortable with Nextflow DSL2 syntax, you could squirrel it away in a utility file.
+
+```nextflow
+// Helper function to provide channel input in the correct format for nf-core modules.
+def get_sample_info(LinkedHashMap row) {
+    def meta = [:]
+    meta.id           = row.sample
+    meta.single_end   = row.single_end.toBoolean()
+
+    def array = []
+    if (!file(row.fastq_1).exists()) {
+        exit 1, "ERROR: Please check input samplesheet -> Read 1 FastQ file does not exist!\n${row.fastq_1}"
+    }
+    if (meta.single_end) {
+        array = [ meta, [ file(row.fastq_1) ] ]
+    } else {
+        if (!file(row.fastq_2).exists()) {
+            exit 1, "ERROR: Please check input samplesheet -> Read 2 FastQ file does not exist!\n${row.fastq_2}"
+        }
+        array = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
+    }
+    return array    
+}
+```
+
+and then in the workflow do:
+```nextflow
+workflow {
+
+    main:
+    Channel.fromFile(params.input)
+        .splitCsv ( header:true, sep:',' )
+        .map { get_sample_info(it) }
+        .set { input_ch }
+
+}
+```
+
+You're channel data should now be in a format nf-core modules expect, allowing you to use
+the modules in the usual way.
+
+```nextflow
+workflow {
+
+    main:
+    Channel.fromFile(params.input)
+        .splitCsv ( header:true, sep:',' )
+        .map { get_sample_info(it) }
+        .set { input_ch }
+
+    FASTQC(input_ch)
+
+}
 ```
