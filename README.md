@@ -124,6 +124,22 @@ This means our FastQC process will be named `FASTQC`, which we can see in the
 tells Nextflow to look for the process definition in the path `./modules/nf-core/software/fastqc`.
 Nextflow checks the path to see if it's a directory, or if a file called `fastqc.nf` exists. If
 it's a directory, Nextflow looks for the file `main.nf`. The last part is the `addParams`
-declaration, which passes parameters to the workflow (`main.nf`) that contains the process
+call, which passes parameters to the workflow (`main.nf`) that contains the process
 definition. In this case, `addParams(options:[:])` initialises the `main.nf` workflow parameter
-`params.options` to an empty Map `[:]`. 
+`params.options` to an empty Map `[:]`.
+
+### Providing module parameters.
+
+As we've just read, parameters are passed to the module via the `addParams(Map params)` call.
+The convention for nf-core Modules and DSL2 workflows is to provide module parameters in a
+file called `conf/modules.config`, which is included by the `nextflow.config`. Let's add
+those as a first step.
+
+```bash
+mkdir conf
+touch conf/modules.config
+```
+and at the top of the `nextflow.config` add:
+```nextflow
+include 'conf/modules.config'
+```
