@@ -20,7 +20,7 @@ which can be reused across nf-core workflows. For example,
 [FastQC](https://github.com/nf-core/modules/tree/master/software/fastqc),
 [BWA index](https://github.com/nf-core/modules/tree/master/software/bwa/index), and
 [BWA mem](https://github.com/nf-core/modules/tree/master/software/bwa/mem) implementations
-can be seen by following their respective links. nf-core provides a software `nf-core`
+can be seen by following their respective links. nf-core provides a software package `nf-core`
 (via `conda` or `pip`) that provides tools to aid using nf-core modules, among other things.
 
 Modules available in the nf-core modules repository can be listed using
@@ -37,8 +37,11 @@ For example,
 nf-core modules install --tool fastqc .
 ```
 which installs the `fastqc` module in the current directory `.`. The module
-is simply a collection of three files, `functions.nf`, `main.nf`, and `meta.yml`,
-explained later.
+is simply a collection of three files, `functions.nf`, `main.nf`, and `meta.yml`.
+`functions.nf` contains utility functions for `main.nf`. The `main.nf` script
+contains the process definition of the module. Finally, the `meta.yml` file
+provides software metadata which can be used for input and outpu validation
+among other things.
 
 nf-core modules are written to a standard that makes it easy to include them
 across nf-core DSL2 workflows. However this makes it slightly more difficult to
@@ -206,7 +209,7 @@ include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:mo
 ```
 This passes the Map `modules['fastqc']` as the `params.options` of the FastQC `main.nf` script.
 You can see where the parameters are used in the
-`main.nf` scripts by looking for the `$options.args` for example.
+`main.nf` scripts by looking for `$options.<parameter>`, for example `$options.args`.
 
 Amend your workflow to include these changes:
 ```nextflow
@@ -228,9 +231,11 @@ may have noticed that the input declaration looks like:
 This means the `FASTQC` process is looking for input in the form
 `[meta, reads]` where `meta` is sample metadata, and `reads` are
 the read files to be processed. `meta` is a Map which provides
-sample specific information, such as `id`, `single_end`, and perhaps other fields e.g. `read_group`.
-Each module needs to be individually checked for which sample metadata fields
-need to be provided. Not all nf-core modules require sample metadata, for example
+sample specific information, such as `id`, `single_end`, and perhaps other
+fields e.g. `read_group`. Each module needs to be individually checked for
+which sample metadata fields need to be provided (search `main.nf` for
+variables named `meta.<field>`, e.g. `meta.id`). Not all nf-core
+modules require sample metadata, for example
 [BWA INDEX](https://github.com/nf-core/modules/blob/master/software/bwa/index/main.nf).
 
 In the nf-core DSL2 template, the sample metadata is expected to be set by
@@ -254,7 +259,7 @@ input to the correct format.
 For example, if the samplesheet contains the columns `sample`,`single_end`,`fastq_1`,
 and `fastq_2`, you could define your own function based on the `get_sample_info`
 function from `INPUT_CHECK` to provide channel data in the expected format.
-If you're comfortable with Nextflow DSL2 syntax, you could squirrel it away in a
+If you're comfortable with Nextflow DSL2 syntax, you could squirrel the function away in a
 utility file for tidiness.
 
 ```nextflow
@@ -294,7 +299,7 @@ workflow {
 ```
 
 Your channel data should now be in a format nf-core modules expect, allowing you to use
-the modules in the usual way.
+the modules in your workflow.
 
 ```nextflow
 workflow {
