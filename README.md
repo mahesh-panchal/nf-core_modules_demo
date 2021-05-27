@@ -54,13 +54,13 @@ Let's assume you've started a DSL2 workflow like so, called `my_dsl2_workflow.nf
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
 
-// A workflow parameter called `reads`, which provides the path to a pair of Illumina sequence files.
-params.reads = ''
+// A workflow parameter called `input`, which provides the path to CSV samplesheet.
+params.input = ''
 
 workflow {
 
     main:
-    Channel.fromFilePairs(params.reads)
+    Channel.fromFile(params.input)
         .set { input_ch }
 
 }
@@ -97,8 +97,8 @@ Let's now include the `FASTQC` process from the fastqc module to our DSL2 workfl
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
 
-// A workflow parameter called `reads`, which provides the path to a pair of Illumina sequence files.
-params.reads = ''
+// A workflow parameter called `input`, which provides the path to CSV samplesheet.
+params.input = ''
 
 // Include the FASTQC process definition from the module file.
 include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:[:])
@@ -106,7 +106,7 @@ include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:[:
 workflow {
 
     main:
-    Channel.fromFilePairs(params.reads)
+    Channel.fromFile(params.input)
         .set { input_ch }
 
 }
@@ -145,9 +145,9 @@ and at the top of the `nextflow.config` add:
 include 'conf/modules.config'
 ```
 
-The `conf/modules.config` is formatted in a particular way. There is a large comment at the
-top of the file describing which parameters can be passed and what they do. This is
-followed by a `params` block, which includes
+The nf-core DSL2 template `conf/modules.config` is formatted in a particular way.
+There is a large comment at the top of the file describing which parameters can
+be passed and what they do. This is followed by a `params` block, which includes
 a `modules` block, and can be accessed in the DSL2 workflow using `params.modules`.
 
 ```
@@ -228,7 +228,7 @@ may have noticed that the input declaration looks like:
 This means the `FASTQC` process is looking for input in the form
 `[meta, reads]` where `meta` is sample metadata, and `reads` are
 the read files to be processed. `meta` is a Map which provides
-sample specific information, such as `id`, `single_end`, and `read_group`.
+sample specific information, such as `id`, `single_end`, and perhaps other fields e.g. `read_group`.
 Each module needs to be individually checked for which sample metadata fields
 need to be provided. Not all nf-core modules require sample metadata, for example
 [BWA INDEX](https://github.com/nf-core/modules/blob/master/software/bwa/index/main.nf).
@@ -254,7 +254,8 @@ input to the correct format.
 For example, if the samplesheet contains the columns `sample`,`single_end`,`fastq_1`,
 and `fastq_2`, you could define your own function based on the `get_sample_info`
 function from `INPUT_CHECK` to provide channel data in the expected format.
-If you're comfortable with Nextflow DSL2 syntax, you could squirrel it away in a utility file.
+If you're comfortable with Nextflow DSL2 syntax, you could squirrel it away in a
+utility file for tidiness.
 
 ```nextflow
 // Helper function to provide channel input in the correct format for nf-core modules.
@@ -292,7 +293,7 @@ workflow {
 }
 ```
 
-You're channel data should now be in a format nf-core modules expect, allowing you to use
+Your channel data should now be in a format nf-core modules expect, allowing you to use
 the modules in the usual way.
 
 ```nextflow
