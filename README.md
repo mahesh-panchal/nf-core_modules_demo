@@ -130,6 +130,7 @@ definition. In this case, `addParams(options:[:])` initialises the `main.nf` wor
 
 ### Providing module parameters.
 
+Many nf-core modules may need additional parameters.
 As we've just read, parameters are passed to the module via the `addParams(Map params)` call.
 The convention for nf-core Modules and DSL2 workflows is to provide module parameters in a
 file called `conf/modules.config`, which is included by the `nextflow.config`. Let's add
@@ -142,4 +143,74 @@ touch conf/modules.config
 and at the top of the `nextflow.config` add:
 ```nextflow
 include 'conf/modules.config'
+```
+
+The `conf/modules.config` is formatted in a particular way. There is a large comment at the
+top of the file describing which parameters can be passed and what they do. This is
+followed by a `params` block, which includes
+a `modules` block, and can be accessed in the DSL2 workflow using `params.modules`.
+
+```
+/*
+========================================================================================
+    Config file for defining DSL2 per module options
+========================================================================================
+    Available keys to override module options:
+        args            = Additional arguments appended to command in module.
+        args2           = Second set of arguments appended to command in module (multi-tool modules).
+        args3           = Third set of arguments appended to command in module (multi-tool modules).
+        publish_dir     = Directory to publish results.
+        publish_by_meta = Groovy list of keys available in meta map to append as directories to "publish_dir" path
+                            If publish_by_meta = true                 - Value of ${meta['id']} is appended as a directory to "publish_dir" path
+                            If publish_by_meta = ['id', 'custompath'] - If "id" is in meta map and "custompath" isn't then "${meta['id']}/custompath/"
+                                                                        is appended as a directory to "publish_dir" path
+                            If publish_by_meta = false / null         - No directories are appended to "publish_dir" path
+        publish_files   = Groovy map where key = "file_ext" and value = "directory" to publish results for that file extension
+                            The value of "directory" is appended to the standard "publish_dir" path as defined above.
+                            If publish_files = null (unspecified)     - All files are published.
+                            If publish_files = false                  - No files are published.
+        suffix          = File name suffix for output files.
+----------------------------------------------------------------------------------------
+*/
+
+params {
+    modules {
+    }
+}
+```
+
+To add parameters for a tool, a named block is included in the `modules` block with the parameters to include/override.
+```
+params {
+    modules {
+        'fastqc' {
+            args         = '--quiet'
+            publishDir   = '01_FastQC'
+        }
+    }
+}
+```
+The convention for naming the module options block is generally `<subworkflow>_<software>_<tool>`,
+however any string can be used.
+
+The nf-core DSL2 template includes an extra line to help accessing these parameter blocks.
+
+```nextflow
+// Don't overwrite global params.modules, create a copy instead and use that within the main script.
+def modules = params.modules.clone()
+```
+
+By adding the line above to your DSL2 workflow, you can then pass the `fastqc` module options to the `FASTQC` module, like so:
+```
+include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:modules['fastqc'])
+```
+This passes the Map `modules['fastqc']` as the `params.options` of the FastQC `main.nf` script.
+
+Amend your workflow to include these changes:
+```nextflow
+// Don't overwrite global params.modules, create a copy instead and use that within the main script.
+def modules = params.modules.clone()
+
+// Include the FASTQC process definition from the module file.
+include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:modules['fastqc'])
 ```
