@@ -314,3 +314,39 @@ workflow {
 
 }
 ```
+
+### Providing parameter defaults for modules
+
+Before the workflow will function, the nf-core modules still
+require further parameterisation. The `main.nf` script for the
+FastQC module still expects values for the variables
+`params.enable_conda`, `params.outdir`, `params.publish_dir_mode`,
+and `params.singularity_pull_docker_container`. You
+can do this by adding the following block to your `nextflow.config`.
+
+```nextflow
+params {
+    enable_conda = false
+    outdir = './results'
+    publish_dir_mode = 'copy'
+    singularity_pull_docker_container = true
+}
+```
+
+This `params` block provides default values for the variables above.
+`params` is treated as a global variable, which is why it is available
+to the module scripts without passing them through the `addParams` call.
+
+### Testing the workflow
+
+The workflow should now be able to use the modules and complete successfully.
+You can test this by creating a `test_samplesheet.csv`.
+
+```
+sample,single_end,fastq_1,fastq_2
+test,0,https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/illumina/amplicon/sample1_R1.fastq.gz,https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/illumina/amplicon/sample1_R2.fastq.gz
+```
+
+```bash
+nextflow run my_dsl2_workflow.nf --input test_samplesheet.csv
+```
