@@ -63,7 +63,7 @@ params.input = ''
 workflow {
 
     main:
-    Channel.fromFile(params.input)
+    Channel.fromPath(params.input)
         .set { input_ch }
 
 }
@@ -109,7 +109,7 @@ include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(optio
 workflow {
 
     main:
-    Channel.fromFile(params.input)
+    Channel.fromPath(params.input)
         .set { input_ch }
 
 }
@@ -290,7 +290,7 @@ and then in the workflow do:
 workflow {
 
     main:
-    Channel.fromFile(params.input)
+    Channel.fromPath(params.input)
         .splitCsv ( header:true, sep:',' )
         .map { get_sample_info(it) }
         .set { input_ch }
@@ -305,7 +305,7 @@ the modules in your workflow.
 workflow {
 
     main:
-    Channel.fromFile(params.input)
+    Channel.fromPath(params.input)
         .splitCsv ( header:true, sep:',' )
         .map { get_sample_info(it) }
         .set { input_ch }

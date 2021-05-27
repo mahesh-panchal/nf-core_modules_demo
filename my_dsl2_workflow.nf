@@ -36,7 +36,7 @@ def get_sample_info(LinkedHashMap row) {
 workflow {
 
     main:
-    Channel.fromFile(params.input)
+    Channel.fromPath(params.input)
         .splitCsv ( header:true, sep:',' )
         .map { get_sample_info(it) }
         .set { input_ch }
