@@ -104,7 +104,7 @@ nextflow.enable.dsl = 2
 params.input = ''
 
 // Include the FASTQC process definition from the module file.
-include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:[:])
+include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:[:])
 
 workflow {
 
@@ -118,15 +118,15 @@ workflow {
 Let's unpack the line we just included.
 
 ```nextflow
-include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:[:])
+include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:[:])
 ```
 
 An nf-core module convention is to name processes in uppercase using `<SOFTWARE>_<TOOL>`.
 This means our FastQC process will be named `FASTQC`, which we can see in the
 `./modules/nf-core/software/fastqc/main.nf` file. The path following the `from` keyword
-tells Nextflow to look for the process definition in the path `./modules/nf-core/software/fastqc`.
-Nextflow checks the path to see if it's a directory, or if a file called `fastqc.nf` exists. If
-it's a directory, Nextflow looks for the file `main.nf`. The last part is the `addParams`
+tells Nextflow to look for the process definition in the path `./modules/nf-core/software/fastqc/main`.
+Nextflow appends `.nf` to the path and checks the path to see if the file `main.nf` exists.
+The last part is the `addParams`
 call, which passes parameters to the workflow (`main.nf`) that contains the process
 definition. In this case, `addParams(options:[:])` initialises the `main.nf` workflow parameter
 `params.options` to an empty Map `[:]`.
@@ -205,7 +205,7 @@ def modules = params.modules.clone()
 
 By adding the line above to your DSL2 workflow, you can then pass the `fastqc` module options to the FastQC module, like so:
 ```
-include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:modules['fastqc'])
+include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:modules['fastqc'])
 ```
 This passes the Map `modules['fastqc']` as the `params.options` of the FastQC `main.nf` script.
 You can see where the parameters are used in the
@@ -217,7 +217,7 @@ Amend your workflow to include these changes:
 def modules = params.modules.clone()
 
 // Include the FASTQC process definition from the module file.
-include { FASTQC } from './modules/nf-core/software/fastqc' addParams(options:modules['fastqc'])
+include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:modules['fastqc'])
 ```
 
 ### Providing metadata.
