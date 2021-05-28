@@ -40,9 +40,15 @@ which installs the `fastqc` module in the current directory `.`. The module
 is simply a collection of three files, `functions.nf`, `main.nf`, and `meta.yml`.
 `functions.nf` contains utility functions for `main.nf`. The `main.nf` script
 contains the process definition of the module. Finally, the `meta.yml` file
-provides software metadata which can be used for input and outpu validation
+provides software metadata which can be used for input and output validation
 among other things.
 
-nf-core modules are written to a standard that makes it easy to include them
+nf-core modules are written to a standard that makes it simpler to include them
 across nf-core DSL2 workflows. However this makes it slightly more difficult to
 include in a generic Nextflow DSL2 workflow.
+
+To see how to use the nf-core modules in your workflow, follow the links below.
+
+- [Using an nf-core module](docs/UsingNFCoreModules)
+- [Adapting an nf-core module](docs/AdaptingNFCoreModules)
+- [Advanced module parameterisation](docs/AdvancedParameterisation)
