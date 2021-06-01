@@ -67,7 +67,7 @@ params {
             <fastqc module params>
         }
         'multiqc' {
-            publish_dir = 'multiqc'
+            publish_dir = 'MultiQC_Report'
         }
     }
 }
