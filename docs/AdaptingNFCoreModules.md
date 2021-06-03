@@ -57,7 +57,7 @@ to:
 
 We can then include the module into our workflow:
 ```nextflow
-include { MULTIQC } from './modules/nf-core/local/multiqc' addParams(options:modules['multiqc'])
+include { MULTIQC } from './modules/local/multiqc' addParams(options:modules['multiqc'])
 ```
 and add :
 ```
