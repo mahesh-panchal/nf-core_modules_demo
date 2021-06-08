@@ -51,7 +51,7 @@ include in a generic Nextflow DSL2 workflow.
 
 To see how to use the nf-core modules in your workflow, follow the links below.
 
-- [Minimal code example](./docs/MinimalCodeExample.md) - For those that find code easier to follow. See the pages below for a more in depth explanation.
+- [Minimal code example](./docs/MinimalCodeExample.md) - When code is easier to follow. More in depth explanation below.
 - [Using an nf-core module](./docs/UsingNFCoreModules.md)
 - [Adapting an nf-core module](./docs/AdaptingNFCoreModules.md)
 - [Making a new local module](./docs/MakingALocalModule.md)
