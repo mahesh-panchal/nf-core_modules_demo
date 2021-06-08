@@ -1,6 +1,8 @@
 # nf-core Modules Demonstration
 
 A demonstration of how to use nf-core modules in your workflow.
+This repository include sample code as well as explanation on how
+to use nf-core modules. 
 
 [nf-core](https://nf-co.re/) is a set of community curated workflows
 written in Nextflow. The DSL2 syntax of Nextflow allows the use of
