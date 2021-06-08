@@ -2,7 +2,7 @@
 
 A demonstration of how to use nf-core modules in your workflow.
 This repository include sample code as well as explanation on how
-to use nf-core modules. 
+to use nf-core modules.
 
 [nf-core](https://nf-co.re/) is a set of community curated workflows
 written in Nextflow. The DSL2 syntax of Nextflow allows the use of
@@ -51,6 +51,7 @@ include in a generic Nextflow DSL2 workflow.
 
 To see how to use the nf-core modules in your workflow, follow the links below.
 
+- [Minimal code example](./docs/MinimalCodeExample.md) - For those that find code easier to follow. See the pages below for a more in depth explanation.
 - [Using an nf-core module](./docs/UsingNFCoreModules.md)
 - [Adapting an nf-core module](./docs/AdaptingNFCoreModules.md)
 - [Making a new local module](./docs/MakingALocalModule.md)
