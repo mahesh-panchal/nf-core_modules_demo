@@ -1,7 +1,7 @@
 # nf-core Modules Demonstration
 
 A demonstration of how to use nf-core modules in your workflow.
-This repository include sample code as well as explanation on how
+This repository includes sample code as well as an explanation on how
 to use nf-core modules.
 
 [nf-core](https://nf-co.re/) is a set of community curated workflows
@@ -51,7 +51,7 @@ include in a generic Nextflow DSL2 workflow.
 
 To see how to use the nf-core modules in your workflow, follow the links below.
 
-- [Minimal code example](./docs/MinimalCodeExample.md) - When code is easier to follow. More in depth explanation below.
+- [Minimal code example](./docs/MinimalCodeExample.md) - When code is easier to follow. The pages below provide greater detail.
 - [Using an nf-core module](./docs/UsingNFCoreModules.md)
 - [Adapting an nf-core module](./docs/AdaptingNFCoreModules.md)
 - [Making a new local module](./docs/MakingALocalModule.md)
