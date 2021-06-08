@@ -47,7 +47,7 @@ def get_sample_info(LinkedHashMap row) {
     }
     // returns data entry in the format expected by FastQC module
     // FASTQC input declaration expects `tuple val(meta), path(reads)`
-    // array is in the format `[ meta, reads ]`.
+    // array is in the format `[ meta, reads ]` (more detail:`[ {id:test, single_end:false}, [file(fastq_1), file(fastq_2)] ]`).
     return array
 }
 
