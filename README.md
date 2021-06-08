@@ -49,7 +49,7 @@ include in a generic Nextflow DSL2 workflow.
 
 To see how to use the nf-core modules in your workflow, follow the links below.
 
-- [Using an nf-core module](./docs/UsingNFCoreModules)
-- [Adapting an nf-core module](./docs/AdaptingNFCoreModules)
-- [Making a new local module](./docs/MakingALocalModule)
-- [Advanced module parameterisation](./docs/AdvancedParameterisation)
+- [Using an nf-core module](./docs/UsingNFCoreModules.md)
+- [Adapting an nf-core module](./docs/AdaptingNFCoreModules.md)
+- [Making a new local module](./docs/MakingALocalModule.md)
+- [Advanced module parameterisation](./docs/AdvancedParameterisation.md)
