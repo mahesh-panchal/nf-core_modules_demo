@@ -92,3 +92,5 @@ params {
 sample,single_end,fastq_1,fastq_2
 test,0,/path/to/sample1_R1.fastq.gz,/path/to/sample1_R2.fastq.gz
 ```
+The column header names are the keywords used to access the row
+values in the helper function `get_sample_info` in the `main.nf` script.
