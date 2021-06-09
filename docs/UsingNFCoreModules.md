@@ -96,7 +96,7 @@ touch conf/modules.config
 ```
 and at the top of the `nextflow.config` add:
 ```nextflow
-include 'conf/modules.config'
+includeConfig 'conf/modules.config'
 ```
 
 The nf-core DSL2 template `conf/modules.config` is formatted in a particular way.
