@@ -74,7 +74,7 @@ params {
     enable_conda = false
     outdir = './results'
     publish_dir_mode = 'copy'
-    singularity_pull_docker_container = true
+    singularity_pull_docker_container = false
 }
 ```
 

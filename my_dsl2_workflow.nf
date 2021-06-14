@@ -42,5 +42,6 @@ workflow {
         .set { input_ch }
 
     FASTQC(input_ch)
+    FASTQC.out.version.view()
 
 }
