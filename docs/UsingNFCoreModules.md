@@ -291,7 +291,7 @@ params {
     enable_conda = false
     outdir = './results'
     publish_dir_mode = 'copy'
-    singularity_pull_docker_container = true
+    singularity_pull_docker_container = false
 }
 ```
 
@@ -310,5 +310,5 @@ test,0,https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/illumi
 ```
 
 ```bash
-nextflow run my_dsl2_workflow.nf --input test_samplesheet.csv
+nextflow run main.nf --input test_samplesheet.csv
 ```
