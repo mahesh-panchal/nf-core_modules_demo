@@ -29,6 +29,14 @@ which can be reused across nf-core workflows. For example,
 can be seen by following their respective links. nf-core provides a software package `nf-core`
 (via `conda` or `pip`) that provides tools to aid using nf-core modules, among other things.
 
+To start using an nf-core module, some conditions need to be satisfied.
+1. The directory you're installing to must have a `main.nf` script.
+1. The directory you're installing to must have a  `nextflow.config`.
+1. The `nextflow.config` must contain a `manifest` block with the
+`name` and `homePage` parameters set.
+1. The directory you're installing to must have a `modules` directory.
+1. `nextflow` must be available in the `PATH` of the current environment.
+
 Modules available in the nf-core modules repository can be listed using
 ```bash
 nf-core modules list
@@ -36,18 +44,22 @@ nf-core modules list
 
 A module can be included using
 ```bash
-nf-core modules install --tool <module> <directory>
+nf-core modules install <module>
 ```
 For example,
 ```bash
-nf-core modules install --tool fastqc .
+nf-core modules install fastqc
 ```
-which installs the `fastqc` module in the current directory `.`. The module
-is simply a collection of three files, `functions.nf`, `main.nf`, and `meta.yml`.
+which installs the `fastqc` module in a subdirectory `./modules/nf-core/modules/fastqc/`. The module
+is a collection of three files, `functions.nf`, `main.nf`, and `meta.yml`.
 `functions.nf` contains utility functions for `main.nf`. The `main.nf` script
 contains the process definition of the module. Finally, the `meta.yml` file
 provides software metadata which can be used for input and output validation
 among other things.
+
+The first time you install an nf-core module, a `modules.json` file is also created in the root of
+your workflow. This is a housekeeping file that keeps
+track of your installed modules.
 
 nf-core modules are written to a standard that makes it simpler to include them
 across nf-core DSL2 workflows. However this makes it slightly more difficult to
