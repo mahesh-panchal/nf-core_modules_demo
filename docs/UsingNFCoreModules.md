@@ -192,13 +192,13 @@ may have noticed that the input declaration looks like:
 ```
 This means the `FASTQC` process is looking for input in the form
 `[meta, reads]` where `meta` is sample metadata, and `reads` are
-the read files to be processed. `meta` is a Map which provides
+the read files to be processed. `meta` is a Groovy Map which provides
 sample specific information, such as `id`, `single_end`, and perhaps other
-fields e.g. `read_group`. Each module needs to be individually checked for
+fields e.g., `read_group`. Each module needs to be individually checked for
 which sample metadata fields need to be provided (search `main.nf` for
 variables named `meta.<field>`, e.g. `meta.id`). Not all nf-core
 modules require sample metadata, for example
-[BWA INDEX](https://github.com/nf-core/modules/blob/master/software/bwa/index/main.nf).
+[BWA INDEX](https://github.com/nf-core/modules/blob/master/modules/bwa/index/main.nf).
 
 In the nf-core DSL2 template, the sample metadata is expected to be set by
 the workflow `INPUT_CHECK`, which calls the process `SAMPLESHEET_CHECK`,

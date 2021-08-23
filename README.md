@@ -23,9 +23,9 @@ nf-core introduced a [modules repository](https://github.com/nf-core/modules/)
 to aid the construction of workflows using the DSL2 syntax. These
 nf-core modules are intended to provide software tool specific processes
 which can be reused across nf-core workflows. For example,
-[FastQC](https://github.com/nf-core/modules/tree/master/software/fastqc),
-[BWA index](https://github.com/nf-core/modules/tree/master/software/bwa/index), and
-[BWA mem](https://github.com/nf-core/modules/tree/master/software/bwa/mem) implementations
+[FastQC](https://github.com/nf-core/modules/tree/master/modules/fastqc),
+[BWA index](https://github.com/nf-core/modules/tree/master/modules/bwa/index), and
+[BWA mem](https://github.com/nf-core/modules/tree/master/modules/bwa/mem) implementations
 can be seen by following their respective links. nf-core provides a software package `nf-core`
 (via `conda` or `pip`) that provides tools to aid using nf-core modules, among other things.
 
