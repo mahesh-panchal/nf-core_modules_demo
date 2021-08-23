@@ -1,5 +1,9 @@
 # nf-core Modules Demonstration
 
+Tested with:
+- Nextflow: 21.04.0
+- nf-core: 2.1
+
 A demonstration of how to use nf-core modules in your workflow.
 This repository includes sample code as well as an explanation on how
 to use nf-core modules.
