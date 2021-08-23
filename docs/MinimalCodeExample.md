@@ -12,16 +12,13 @@ The workflow takes a formatted samplesheet and runs FastQC.
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
 
-// A workflow parameter called `input`, which provides the path to CSV samplesheet.
-params.input = ''
-
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 def modules = params.modules.clone()
 
-// Installed with `nf-core modules install -t fastqc .`
+// Installed with `nf-core modules install fastqc`
 // Include the FASTQC process definition from the module file.
 // modules['fastqc'] is Groovy Map containing parameters from the `modules.config`.
-include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:modules['fastqc'])
+include { FASTQC } from './modules/nf-core/modules/fastqc/main' addParams(options:modules['fastqc'])
 
 // Helper function to provide channel input in the correct format for nf-core modules.
 def get_sample_info(LinkedHashMap row) {
@@ -66,16 +63,23 @@ workflow {
 
 `nextflow.config`:
 ```nextflow
-// Load modules.config for DSL2 module specific options
-includeConfig 'conf/modules.config'
+// Workflow manifest
+manifest {
+    name = 'nf-core_modules_demo'
+    homePage = 'https://github.com/mahesh-panchal/nf-core_modules_demo'
+}
 
-// Include minimum necessary parameters for nf-core modules
+// Workflow parameters
+// Override using `-c <custom_config>` or on the command-line, e.g., `--input`.
 params {
+    input = ''
     enable_conda = false
     outdir = './results'
     publish_dir_mode = 'copy'
     singularity_pull_docker_container = false
 }
+// Load modules.config for DSL2 module specific options
+includeConfig 'conf/modules.config'
 ```
 
 `conf/modules.config`:
@@ -84,7 +88,7 @@ params {
     modules {
         'fastqc' {       // passed as modules['fastqc'] in the module include statement
             args         = '--quiet'
-            publishDir   = '01_FastQC'
+            publish_dir  = '01_FastQC'
         }
     }
 }

@@ -150,7 +150,7 @@ params {
     modules {
         'fastqc' {
             args         = '--quiet'
-            publishDir   = '01_FastQC'
+            publish_dir  = '01_FastQC'
         }
     }
 }
