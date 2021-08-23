@@ -80,18 +80,18 @@ workflow {
 Let's unpack the line we just included.
 
 ```nextflow
-include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:[:])
+include { FASTQC } from './modules/nf-core/modules/fastqc/main' addParams(options:[:])
 ```
 
 An nf-core module convention is to name processes in uppercase using `<SOFTWARE>_<TOOL>`.
 This means our FastQC process will be named `FASTQC`, which we can see in the
-`./modules/nf-core/software/fastqc/main.nf` file. The path following the `from` keyword
-tells Nextflow to look for the process definition in the path `./modules/nf-core/software/fastqc/main`.
+`./modules/nf-core/modules/fastqc/main.nf` file. The path following the `from` keyword
+tells Nextflow to look for the process definition in the path `./modules/nf-core/modules/fastqc/main`.
 Nextflow appends `.nf` to the path and checks the path to see if the file `main.nf` exists.
 The last part is the `addParams`
 call, which passes parameters to the workflow (`main.nf`) that contains the process
 definition. In this case, `addParams(options:[:])` initialises the `main.nf` workflow parameter
-`params.options` to an empty Map `[:]`.
+`params.options` to an empty Groovy Map `[:]`.
 
 ### Providing module parameters.
 

@@ -7,7 +7,7 @@ nextflow.enable.dsl = 2
 def modules = params.modules.clone()
 
 // Include the FASTQC process definition from the module file.
-include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:modules['fastqc'])
+include { FASTQC } from './modules/nf-core/modules/fastqc/main' addParams(options:modules['fastqc'])
 
 // Helper function to provide channel input in the correct format for nf-core modules.
 def get_sample_info(LinkedHashMap row) {
