@@ -105,7 +105,7 @@ those as a first step.
 mkdir conf
 touch conf/modules.config
 ```
-and at the top of the `nextflow.config` add:
+and include this config under the `params` block in your `nextflow.config`:
 ```nextflow
 includeConfig 'conf/modules.config'
 ```
@@ -169,7 +169,7 @@ By adding the line above to your DSL2 workflow, you can then pass the `fastqc` m
 ```
 include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:modules['fastqc'])
 ```
-This passes the Map `modules['fastqc']` as the `params.options` of the FastQC `main.nf` script.
+This passes the Groovy Map `modules['fastqc']` as the `params.options` of the FastQC `main.nf` script.
 You can see where the parameters are used in the
 `main.nf` scripts by looking for `$options.<parameter>`, for example `$options.args`.
 
