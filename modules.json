@@ -1,0 +1,11 @@
+{
+    "name": "nf-core_modules_demo",
+    "homePage": "https://github.com/mahesh-panchal/nf-core_modules_demo",
+    "repos": {
+        "nf-core/modules": {
+            "fastqc": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            }
+        }
+    }
+}

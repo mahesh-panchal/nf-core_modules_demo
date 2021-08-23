@@ -1,15 +1,15 @@
 ## How to use an nf-core module
 
-Let's assume you've started a DSL2 workflow like so, called `my_dsl2_workflow.nf`:
+In order to use nf-core modules, you need a `main.nf`,
+a `nextflow.config`, and a folder `modules` in your
+workflow directory.
+Let's assume you've started a DSL2 workflow in `main.nf` like so:
 
 ```nextflow
 #! /usr/bin/env nextflow
 
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
-
-// A workflow parameter called `input`, which provides the path to CSV samplesheet.
-params.input = ''
 
 workflow {
 
@@ -20,26 +20,40 @@ workflow {
 }
 ```
 
-You've discovered using `nf-core modules list` that software you want, FastQC, is available as an
+with a `nextflow.config`:
+```
+// Workflow manifest
+manifest {
+    name = 'nf-core_modules_demo'
+    homePage = 'https://github.com/mahesh-panchal/nf-core_modules_demo'
+}
+
+// Workflow parameters
+// Override using `-c <custom_config>` or on the command-line, e.g., `--input`.
+params {
+    input = ''
+}
+```
+
+You've discovered using `nf-core modules list` that the software you want, FastQC, is available as an
 nf-core module. So let's install it in the same directory as your DSL2 workflow.
 
 ```bash
-nf-core modules install --tool fastqc .
+nf-core modules install fastqc
 ```
 
-Using this the first time around will likely produce an error, along the lines of
-`CRITICAL Could not find a 'main.nf' or 'nextflow.config' file in '.'`. To remedy
-this, create a `nextflow.config` file (`touch nextflow.config`), and then try to
-install the module again.
+If you encounter the error `ERROR    Could not determine repository type of '.'`, then make sure you're in the correct directory and you have met
+the requirements stated earlier.
 
 Your working directory will now look something like this:
 ```
-| - modules/nf-core/software/fastqc
+| - modules/nf-core/modules/fastqc
 |    | - functions.nf
 |    | - main.nf
 |    \ - meta.yml
 |
-| - my_dsl2_workflow.nf
+| - main.nf
+| - modules.json
 \ - nextflow.config
 ```
 
@@ -51,11 +65,8 @@ Let's now include the `FASTQC` process from the fastqc module to our DSL2 workfl
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
 
-// A workflow parameter called `input`, which provides the path to CSV samplesheet.
-params.input = ''
-
 // Include the FASTQC process definition from the module file.
-include { FASTQC } from './modules/nf-core/software/fastqc/main' addParams(options:[:])
+include { FASTQC } from './modules/nf-core/modules/fastqc/main' addParams(options:[:])
 
 workflow {
 

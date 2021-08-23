@@ -3,9 +3,6 @@
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
 
-// A workflow parameter called `input`, which provides the path to CSV samplesheet.
-params.input = ''
-
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 def modules = params.modules.clone()
 
