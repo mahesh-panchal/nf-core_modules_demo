@@ -14,23 +14,23 @@ based on the tool name. e.g. `multiqc_illumina.nf`.
 
 Let's follow this convention too. Begin by installing the module as before.
 ```bash
-nf-core modules install --tool multiqc .
+nf-core modules install multiqc
 ```
-which can be found in `modules/nf-core/software/multiqc/`.
+which can be found in `modules/nf-core/modules/multiqc/`.
 Then make the folder `modules/local`, and copy the `functions.nf` script
 there.
 ```bash
 mkdir -p modules/local
-cp modules/nf-core/software/multiqc/functions.nf modules/local/functions.nf
+cp modules/nf-core/modules/multiqc/functions.nf modules/local/functions.nf
 ```
 Next make a copy of the `main.nf` renaming the script after the tool.
 ```bash
-cp modules/nf-core/software/multiqc/main.nf modules/local/multiqc.nf
+cp modules/nf-core/modules/multiqc/main.nf modules/local/multiqc.nf
 ```
 
 If you want, you can then remove the installed module using
 ```bash
-nf-core modules remove --tool multiqc .
+nf-core modules remove multiqc
 ```
 
 The next step is to change the necessary parts of the code
@@ -38,10 +38,10 @@ to fit your workflow, for example the input declaration.
 
 Let's make a custom module for MultiQC
 ```bash
-nf-core modules install --tool multiqc .
+nf-core modules install multiqc
 mkdir -p modules/local
-cp modules/nf-core/software/multiqc/functions.nf modules/local/functions.nf
-cp modules/nf-core/software/multiqc/main.nf modules/local/multiqc.nf
+cp modules/nf-core/modules/multiqc/functions.nf modules/local/functions.nf
+cp modules/nf-core/modules/multiqc/main.nf modules/local/multiqc.nf
 ```
 and then change the input from:
 ```nextflow
